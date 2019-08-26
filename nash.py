@@ -86,8 +86,11 @@ def train(iteration):
         opp_action = getAction(opp_strategy)
 
         action_utility[opp_action] = 0
+        index = 0
+        if index == NUM_ACTIONS - 1:
+            index = opp_action - 1
 
-        action_utility[opp_action == NUM_ACTIONS - 1 and 0 or opp_action-1] = 1
+        action_utility[index] = 1
         action_utility[opp_action == 0 and NUM_ACTIONS - 1 or opp_action - 1] = 1
 
         for j in range(NUM_ACTIONS):
