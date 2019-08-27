@@ -29,12 +29,15 @@ def getStrategy():
     '''
     normalizing_sum = 0.0
     for i in range(NUM_ACTIONS):
-        strategry[i] = regret_sum[i] > 0 and regret_sum[i] or 0.0
+        strategry[i] = 0.0
+        if regret_sum[i] > 0:
+            strategry[i] = regret_sum[i]
+        # strategry[i] = regret_sum[i] > 0 and regret_sum[i] or 0.0
         normalizing_sum += strategry[i]  # Normalization sum can be positive or negative based on regret
 
     # In cases where normalization becomes negative due to regrets the strategy needs to be updated to maintain uniform
     for i in range(NUM_ACTIONS):
-        if normalizing_sum > 0 :
+        if normalizing_sum > 0:
             strategry[i] /= normalizing_sum
         else:
             strategry[i] = 1.0/NUM_ACTIONS
@@ -62,7 +65,7 @@ def getAction(strat):
     :param strat:
     :return head or tain or scissor (either one):
     '''
-    r, a, cum_prob = random.randint(0, 3), 0, 0.0
+    r, a, cum_prob = random.random(), 0, 0.0
     while a < NUM_ACTIONS-1:
         cum_prob += strat[a]
         if r < cum_prob:
@@ -89,10 +92,9 @@ def train(iteration):
         index = 0
         if index == NUM_ACTIONS - 1:
             index = opp_action - 1
-
         action_utility[index] = 1
-        action_utility[opp_action == 0 and NUM_ACTIONS - 1 or opp_action - 1] = 1
-
+        action_utility[opp_action == 0 and NUM_ACTIONS - 1 or opp_action - 1] = -1
+        print("Action:",action_utility)
         for j in range(NUM_ACTIONS):
             regret_sum[j] += action_utility[j] - action_utility[my_action]
 
